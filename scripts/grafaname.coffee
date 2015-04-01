@@ -2,7 +2,7 @@
 #   Get a link to view controller actions in grafana
 #
 # Commands:
-#   hubot grafaname <controller> <action> - returns back a grafana link
+#   hubot grafaname <controller> <action> - returns back a canvas grafana link
 #
 # Configuration:
 #   HUBOT_GRAFANA_URL (url to grafana i.e. https://grafana.site.com)
@@ -18,8 +18,9 @@ module.exports = (robot) ->
     args = msg.match[1].split(' ')
     controller = args[0]
     action = args[1]
-    url = process.env.HUBOT_GRAFANA_URL + '/#/dashboard/script/request.js'
-    url += '?controller=' + controller
-    url += '&action=' + action
-    slackMessage(robot, msg, url, args.join(' '))
-    #msg.reply url
+    #url = process.env.HUBOT_GRAFANA_URL + '/#/dashboard/script/request.js'
+    #url += '?controller=' + controller
+    #url += '&action=' + action
+    #url = process.env.HUBOT_GRAFANA_URL + '/#/dashboard/db/time-shift-canvas'
+    #slackMessage(robot, msg, url, args.join(' '))
+    msg.reply 'so close, but scripted dashboards are not ready'
