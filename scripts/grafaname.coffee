@@ -2,7 +2,7 @@
 #   Get a link to view controller actions in grafana
 #
 # Commands:
-#   hubot grafaname <controller> <action> - returns back a canvas grafana link
+#   hubot grafaname <controller> <action> [timeshift] - returns back a canvas grafana link, include the word timeshift to include it in the graph
 #
 # Configuration:
 #   HUBOT_GRAFANA_URL (url to grafana i.e. https://grafana.site.com)
@@ -12,15 +12,19 @@
 
 slackMessage = require('../lib/slack_message')
 
+
+hasTimeShift = (args) ->
+  args.join('**').match(/timeshift/)
+
 module.exports = (robot) ->
 
   robot.respond /grafaname (.*)/, (msg) ->
     args = msg.match[1].split(' ')
     controller = args[0]
     action = args[1]
-    #url = process.env.HUBOT_GRAFANA_URL + '/#/dashboard/script/request.js'
-    #url += '?controller=' + controller
-    #url += '&action=' + action
-    #url = process.env.HUBOT_GRAFANA_URL + '/#/dashboard/db/time-shift-canvas'
-    #slackMessage(robot, msg, url, args.join(' '))
-    msg.reply 'so close, but scripted dashboards are not ready'
+    url = process.env.HUBOT_GRAFANA_URL + '/#/dashboard/script/request.js'
+    url += '?controller=' + controller
+    url += '&action=' + action
+    if hasTimeShift(args.slice(2))
+      url += '&timeshift=true'
+    slackMessage(robot, msg, url, args.join(' '))
