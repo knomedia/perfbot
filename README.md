@@ -187,3 +187,21 @@ hubot onto Windows][deploy-windows] wiki pages.
 
 You may want to get comfortable with `heroku logs` and `heroku restart` if
 you're having issues.
+
+## Local Docker Development
+
+For local development use docker. First you'll need to copy
+`bin/env.example.sh` and add the appropriate creds. docker-compose will add
+those to the existing ENV vars listed.
+
+Build the container:
+
+```bash
+docker-compose build
+```
+
+Start the container
+
+```bash
+docker-compose up
+```

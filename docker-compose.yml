@@ -1,0 +1,39 @@
+redis:
+  image: redis:2.8
+  ports:
+    - "6379"
+web:
+  build: .
+  volumes:
+    - .:/usr/src/app
+  links:
+    - redis
+  environment:
+    HUBOT_GRAFANA_URL: "https://grafana.insops.net"
+    HUBOT_GLINK_HOSTNAME: "graphite.insops.net"
+    HUBOT_GLINK_USE_SLACK_API: 'true'
+    HUBOT_GLINK_SLACK_IMAGES: 'true'
+    HUBOT_GLINK_SLACK_COLOR: "#34495E"
+    HUBOT_GLINK_ABSOLUTE_TIMES: "true"
+    HUBOT_GLINK_DEFAULT_PARAMS: "from:-1w, until:now, width:750, height:450, drawNullAsZero:true"
+    HUBOT_GLINK_DEFAULT_APP: 'canvas'
+    HUBOT_GLINK_CANVAS_TEMPLATE: "stats.timers.canvas.prod.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_CANVAS_TEMPLATE_DEFAULTS: "!!#controller#!!===users, !!#action#!!===index, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_PANDASH_TEMPLATE: "stats.timers.cg.pandash.beta.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_PANDASH_TEMPLATE_DEFAULTS: "!!#controller#!!===api-v1-apps, !!#action#!!===show, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_CATALOG_TEMPLATE: "stats.timers.ins-app.catalog.production.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_CATALOG_TEMPLATE_DEFAULTS: "!!#controller#!!===enrollment, !!#action#!!===create, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_ZUULEDGE_TEMPLATE: "stats.timers.cg.zuul.edge.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_ZUULEDGE_TEMPLATE_DEFAULTS: "!!#controller#!!===api-roles, !!#action#!!===index, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_ZUUL_TEMPLATE: "stats.timers.cg.zuul.prod.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_ZUUL_TEMPLATE_DEFAULTS: "!!#controller#!!===api-roles, !!#action#!!===index, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_BRIDGE_TEMPLATE: "stats.timers.cg.bridge.prod.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_BRIDGE_TEMPLATE_DEFAULTS: "!!#controller#!!===api-author-roles, !!#action#!!===create, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_DREDD_TEMPLATE: "stats.timers.cg.dredd.prod.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_DREDD_TEMPLATE_DEFAULTS: "!!#controller#!!===problems, !!#action#!!===sidebar, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_TWEED_TEMPLATE: "stats.timers.cg.tweed.production.request.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
+    HUBOT_GLINK_TWEED_TEMPLATE_DEFAULTS: "!!#controller#!!===tweed_auth-sessions, !!#action#!!===show, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_GLINK_LOR_TEMPLATE: "stats.timers.ins-app.lor-production.us-east-1.duration.!!#controller#!!.!!#action#!!.!!#stat#!!"
+    HUBOT_GLINK_LOR_TEMPLATE_DEFAULTS: "!!#controller#!!===Courses, !!#action#!!===index, !!#stat#!!==={mean,median,upper_95}"
+    HUBOT_SLACK_TOKEN:
+    HUBOT_GLINK_CREDS:
