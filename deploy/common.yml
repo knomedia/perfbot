@@ -1,19 +1,31 @@
-redis:
-  image: redis:2.8
-  ports:
-    - "6379"
-web:
-  build: .
-  volumes:
-    - .:/usr/src/app
-  links:
-    - redis
-  ports:
-    - 9000
-  environment:
-    VIRTUAL_HOST: "perfbot.docker"
-    NODE_ENV: "production"
-    EXPRESS_PORT: 9000
+cloudgate:
+  required_version: ">= 2.6"
+
+app:
+  name: perfbot
+  region: us-west-2
+  vpc_cluster: eng
+  deploy_group: PerfbotDeployers
+  deploy_users: [jmadsen]
+  ssh_users:
+    jmadsen: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC6vZNy7nW59G0lK1GM/0BZAaNlfAAjDnAX9ysHOg0uhUi+XtE0seG36ej24DscXYLgE22xlOvYSS/jDtUiW+JYztz9wZ/HetiY/g9oKy4GCD0OWjE3DAi0+it9krdJkqDEXVstjbkex2DpG0qmUStUGIlenBYWc0GofDYUo6NqVTRnTACnKiCV96HofxjakHzBF1vu95oe0itDPIoOyxP7zgm8f64DkSPNxP6elRnizZtaFBtHqPle8iCponZ3p9LpdryQdvmO4vIenvGZljCwA07+nbL8Os2SleQYTH4JD3ENiioQIbDzAfsSv1zfuVLgcA3xMuFEADiAQaVrL6eN
+  deploy:
+    docker_registry: docker.insops.net
+  exposed_port: 8080
+  instance_pools:
+    web:
+      flavor: web
+      health_check_path: /health-check
+      ssl_cert_arn: "arn:aws:iam::830473435438:server-certificate/star.inseng.net_20160531"
+      min_size: 1
+      env_vars:
+        PERFBOT_ROLE: web
+  cache:
+    cache_node_type: cache.t2.micro
+    num_cache_nodes: 1
+    env_var_prefix: REDIS
+  env_vars:
+    NODE_ENV: production
     HUBOT_GRAFANA_URL: "https://grafana.insops.net"
     HUBOT_GLINK_HOSTNAME: "graphite.insops.net"
     HUBOT_GLINK_USE_SLACK_API: 'true'
@@ -42,5 +54,3 @@ web:
     HUBOT_GLINK_TWEED_TEMPLATE_DEFAULTS: "!!#controller#!!===tweed_auth-sessions, !!#action#!!===show, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
     HUBOT_GLINK_COMMONS_TEMPLATE: "stats.timers.ins-app.lor-production.us-east-1.requests.!!#controller#!!.!!#action#!!.!!#type#!!.!!#stat#!!"
     HUBOT_GLINK_COMMONS_TEMPLATE_DEFAULTS: "!!#controller#!!===Courses, !!#action#!!===index, !!#type#!!===total, !!#stat#!!==={mean,median,upper_95}"
-    HUBOT_SLACK_TOKEN:
-    HUBOT_GLINK_CREDS:

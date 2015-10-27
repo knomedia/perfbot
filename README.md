@@ -14,45 +14,28 @@ add on script via npm.
 
 ### Running perfbot Locally
 
-You can test your hubot by running the following, however some plugins will not
-behave as expected unless the [environment variables](#configuration) they rely
-upon have been set.
+There are a pair of environment variables you will need to set. You can copy
+them from the example file.
 
-You can start perfbot locally by running:
+```bash
+cp bin/env.example.sh bin/env.sh
+```
 
-    % bin/hubot
+Then sub out your creds and save the file. (this of course assumes that you
+have a slack token for perfbot to use... you may need to create a free slack
+chanel)
 
-You'll see some start up output and a prompt:
+```bash
+source bin/env.sh
+docker-compose build
+docker-compose up
+```
 
-    [Sat Feb 28 2015 12:38:27 GMT+0000 (GMT)] INFO Using default redis on localhost:6379
-    perfbot>
-
-Then you can interact with perfbot by typing `perfbot help`.
-
-    perfbot> perfbot help
-    perfbot animate me <query> - The same thing as `image me`, except adds [snip]
-    perfbot help - Displays all of the help commands that perfbot knows about.
-    ...
 
 ### Configuration
 
-A few scripts (including some installed by default) require environment
-variables to be set as a simple form of configuration.
-
-Each script should have a commented header which contains a "Configuration"
-section that explains which values it requires to be placed in which variable.
-When you have lots of scripts installed this process can be quite labour
-intensive. The following shell command can be used as a stop gap until an
-easier way to do this has been implemented.
-
-    grep -o 'hubot-[a-z0-9_-]\+' external-scripts.json | \
-      xargs -n1 -i sh -c 'sed -n "/^# Configuration/,/^#$/ s/^/{} /p" \
-          $(find node_modules/{}/ -name "*.coffee")' | \
-        awk -F '#' '{ printf "%-25s %s\n", $1, $2 }'
-
-How to set environment variables will be specific to your operating system.
-Rather than recreate the various methods and best practices in achieving this,
-it's suggested that you search for a dedicated guide focused on your OS.
+Configuration is provided in the `docker-compose.yml` file (for local dev), or
+via the cloudgate configs in the `deploy` directory.
 
 ### Scripting
 
@@ -157,51 +140,4 @@ Where `<adapter>` is the name of your adapter without the `hubot-` prefix.
 
 ## Deployment
 
-    % heroku create --stack cedar
-    % git push heroku master
-
-If your Heroku account has been verified you can run the following to enable
-and add the Redis to Go addon to your app.
-
-    % heroku addons:add redistogo:nano
-
-If you run into any problems, checkout Heroku's [docs][heroku-node-docs].
-
-You'll need to edit the `Procfile` to set the name of your hubot.
-
-More detailed documentation can be found on the [deploying hubot onto
-Heroku][deploy-heroku] wiki page.
-
-### Deploying to UNIX or Windows
-
-If you would like to deploy to either a UNIX operating system or Windows.
-Please check out the [deploying hubot onto UNIX][deploy-unix] and [deploying
-hubot onto Windows][deploy-windows] wiki pages.
-
-[heroku-node-docs]: http://devcenter.heroku.com/articles/node-js
-[deploy-heroku]: https://github.com/github/hubot/blob/master/docs/deploying/heroku.md
-[deploy-unix]: https://github.com/github/hubot/blob/master/docs/deploying/unix.md
-[deploy-windows]: https://github.com/github/hubot/blob/master/docs/deploying/unix.md
-
-## Restart the bot
-
-You may want to get comfortable with `heroku logs` and `heroku restart` if
-you're having issues.
-
-## Local Docker Development
-
-For local development use docker. First you'll need to copy
-`bin/env.example.sh` and add the appropriate creds. docker-compose will add
-those to the existing ENV vars listed.
-
-Build the container:
-
-```bash
-docker-compose build
-```
-
-Start the container
-
-```bash
-docker-compose up
-```
+Perfbot is deployed via cloudgate. Follow the typicall procedures for deploying a cloudgate app.

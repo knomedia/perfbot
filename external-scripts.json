@@ -2,6 +2,5 @@
   "hubot-diagnostics",
   "hubot-glink",
   "hubot-help",
-  "hubot-heroku-keepalive",
   "hubot-redis-brain"
 ]

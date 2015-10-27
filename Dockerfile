@@ -9,5 +9,6 @@ RUN npm install
 RUN chown -R docker:docker $APP_HOME
 
 USER docker
+EXPOSE 9000
 
 CMD ["bin/startup"]
